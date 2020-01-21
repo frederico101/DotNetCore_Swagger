@@ -8,6 +8,7 @@ using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace DevIO.Api.V1.Controllers
 {
@@ -20,20 +21,22 @@ namespace DevIO.Api.V1.Controllers
         public readonly IProdutoService _produtoService;
         private readonly IProdutoRepository _produtoRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
 
         public ProdutosController(INotificador notificator,
                                   IProdutoRepository produtoRepository,
                                   IProdutoService produtoService,
-                                  IMapper mapper) : base(notificator)
+                                  IMapper mapper,
+                                  ILogger logger) : base(notificator, logger)
         {
             _produtoRepository = produtoRepository;
             _produtoService = produtoService;
             _mapper = mapper;
         }
-       
 
-     
+
+
         [HttpPost]
         public async Task<ActionResult<IEnumerable<ProdutoViewModel>>> Adicionar(ProdutoViewModel produtoViewModel)
         {
@@ -80,19 +83,19 @@ namespace DevIO.Api.V1.Controllers
 
 
 
-       
+
         [HttpGet]
 
         public async Task<IEnumerable<ProdutoViewModel>> ObterTodos()
         => _mapper.Map<IEnumerable<ProdutoViewModel>>(await _produtoRepository.ObterProdutosFornecedores());
- 
- 
- 
+
+
+
         [HttpGet("{id:guid}")]
         private async Task<ProdutoViewModel> ObterProduto(Guid id)
         => _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterProdutoFornecedor(id));
 
-        
+
 
         // here
         [HttpGet("{id}")]
@@ -104,17 +107,17 @@ namespace DevIO.Api.V1.Controllers
 
             return produtoViewModel;
         }
-      
-      
-      
-        
-       
-       
-     
 
 
-      
-        
+
+
+
+
+
+
+
+
+
         [HttpDelete("{id:guid}")]
 
         public async Task<ActionResult<ProdutoViewModel>> Excluir(Guid id)
@@ -128,8 +131,8 @@ namespace DevIO.Api.V1.Controllers
             return CustomResponse(produto);
         }
 
-         
-         
+
+
         [HttpPut("{id:guid}")]
 
         public async Task<ActionResult<ProdutoViewModel>> Atualizar(Guid id, ProdutoViewModel produtoViewModel)
@@ -162,6 +165,6 @@ namespace DevIO.Api.V1.Controllers
 
             return Ok();
         }
-        
+
     }
 }

@@ -8,7 +8,7 @@ using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 
 namespace DevIO.Api.V1.Controllers
 {
@@ -20,12 +20,14 @@ namespace DevIO.Api.V1.Controllers
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
+         private readonly ILogger _logger;
 
 
         public FornecedoresController(IFornecedorRepository fornecedorRepository,
                                       IMapper mapper,
                                       IFornecedorService fornecedorService,
-                                      INotificador notificador) : base(notificador)
+                                      INotificador notificador,
+                                      ILogger logger) : base(notificador, logger)
         {
             _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;

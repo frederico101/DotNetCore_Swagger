@@ -4,6 +4,7 @@ using DevIO.Business.Intefaces;
 using DevIO.Business.Notificacoes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
 
 namespace DevIO.Api.Controllers
 {
@@ -13,11 +14,13 @@ namespace DevIO.Api.Controllers
     public abstract class MainController : ControllerBase
     {
         private readonly INotificador _notificador;
+        private readonly ILogger _logger;
      
 
-        public MainController(INotificador notificador)
+        public MainController(INotificador notificador, ILogger logger)
         {
             _notificador = notificador;
+            _logger = logger;
         }
 
         protected bool OperacaoValida()

@@ -8,6 +8,7 @@ using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -18,20 +19,24 @@ namespace DevIO.Api.V1.Controllers
     [Route("api/v{version:apiVersion}")]
     public class AuthController : MainController
     {
+        private readonly ILogger _logger;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+       
 
         private readonly AppSettings _appsettings;
         
         public AuthController(INotificador notificador,
                                  SignInManager<IdentityUser> signInManager,
                                  UserManager<IdentityUser> userManager,
-                                 IOptions<AppSettings> appsettings
-                                 ) : base(notificador)
+                                 IOptions<AppSettings> appsettings,
+                                 ILogger<AuthController> logger
+                                 ) : base(notificador, logger)
         {
             _signInManager = signInManager;
             _userManager  = userManager;
             _appsettings = appsettings.Value;
+            _logger = logger;
         }
 
         [HttpPost("nova-conta")]
@@ -50,6 +55,7 @@ namespace DevIO.Api.V1.Controllers
             
              if(result.Succeeded)
              {
+
                  await _signInManager.SignInAsync(user, false); //is persistent = false
                  return CustomResponse(GerarJwt());
              }
@@ -75,12 +81,13 @@ namespace DevIO.Api.V1.Controllers
                
                if(result.Succeeded)
                {
+                   _logger.LogInformation($"Usuario {loginUser.Email} logado com sucesso");
                    return CustomResponse(GerarJwt());
                }
                 if(result.IsLockedOut)
                {
                    NotificarErro("Usuario temporariamente boqueado por tentativas inválidas");
-                   return CustomResponse(loginUser.Email);
+                   return CustomResponse(loginUser);
                }
                NotificarErro("Usuário ou senha incorretos");
                return CustomResponse(loginUser);
