@@ -1,9 +1,11 @@
 
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -14,23 +16,26 @@ namespace DevIO.Api.Configurations
     {
         public static IServiceCollection AddSwaggerConfig(this IServiceCollection services)
         {
-
+        /*
             services.AddSwaggerGen(c =>
           {
               c.OperationFilter<SwaggerDefaultValues>();
 
-          });
+          }); */
+          
 
             return services;
         }
         public static IApplicationBuilder UseSwaggerConfig(this IApplicationBuilder app, IApiVersionDescriptionProvider provider)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(
+                options =>
             {
                 foreach (var description in provider.ApiVersionDescriptions)
                 {
-                    Options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+
+                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
                 }
 
             });
@@ -41,14 +46,14 @@ namespace DevIO.Api.Configurations
 
     }
 
-
- public class SwaggerDefaultValues : IOperationFilter
+  /*
+    public class SwaggerDefaultValues : IOperationFilter
     {
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             var apiDescription = context.ApiDescription;
 
-            operation.Deprecated = apiDescription.IsDeprecated();
+            operation.Deprecated = apiDescription.ParameterDescriptions();
 
             if (operation.Parameters == null)
             {
@@ -73,7 +78,12 @@ namespace DevIO.Api.Configurations
             }
 
         }
-    }
+
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        {
+            throw new NotImplementedException();
+        }
+    } */
 
 
 
@@ -102,17 +112,24 @@ namespace DevIO.Api.Configurations
             }
         }
 
-        static Info CreateInfoForApiVersion(ApiVersionDescription description)
+        static OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
         {
-            var info = new Info()
+            var info = new OpenApiInfo()
             {
                 Title = "API - desenvolvedor.io",
                 Version = description.ApiVersion.ToString(),
                 Description = "Esta Api fazparte do curso Rest com aspnet core webapi",
-                Contact = new Contact() { Name = "Raj", Email = "raj@aec.com,br" },
-                TermsOfService = "htps://opensource.org/licenses/MIT",
-                License = new License() { Name = "MIT", Url = "htps://opensource.org/licenses/MIT" }
-
+                Contact = new OpenApiContact
+                {
+                    Name = "Raj",
+                    Email = "raj@aec.com,br",
+                    Url = new Uri("htps://opensource.org/licenses/MIT"),
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "MIT",
+                    Url = new Uri("htps://opensource.org/licenses/MIT"),
+                },
             };
 
             if (description.IsDeprecated)
@@ -125,22 +142,6 @@ namespace DevIO.Api.Configurations
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
 
 
 }

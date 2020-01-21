@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using DevIO.Api.Controllers;
 using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace DevIO.Api.Controllers
+namespace DevIO.Api.V1.Controllers
 {
     [AllowAnonymous]
     [ApiVersion("1.0")]
@@ -31,7 +32,7 @@ namespace DevIO.Api.Controllers
             _fornecedorService = fornecedorService;
 
         }
-
+         ///funcionou
         //3c06e6cd-1b4f-41ce-80d9-6c8ba07c6d92 d1871188822e4c3c9b176164611a1948 49a8acc0-cb51-4c02-ba04-5ef1f260c78b
         [AllowAnonymous]
         [HttpGet]

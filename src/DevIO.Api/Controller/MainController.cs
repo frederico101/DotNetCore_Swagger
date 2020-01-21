@@ -13,7 +13,7 @@ namespace DevIO.Api.Controllers
     public abstract class MainController : ControllerBase
     {
         private readonly INotificador _notificador;
-
+     
 
         public MainController(INotificador notificador)
         {
