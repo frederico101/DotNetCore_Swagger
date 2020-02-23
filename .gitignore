@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/aspnetcore
-# Edit at https://www.gitignore.io/?templates=aspnetcore
+# Created by https://www.gitignore.io/api/aspnetcore,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=aspnetcore,visualstudiocode
 
 ### ASPNETCore ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -272,4 +272,15 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools/
 
-# End of https://www.gitignore.io/api/aspnetcore
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+# End of https://www.gitignore.io/api/aspnetcore,visualstudiocode
